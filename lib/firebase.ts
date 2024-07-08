@@ -1,6 +1,6 @@
 import firebase, { getApp, initializeApp } from "firebase/app";
 import 'firebase/auth';
-import { getAuth, GoogleAuthProvider} from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import 'firebase/firestore';
 import { getFirestore } from "firebase/firestore";
 import 'firebase/storage';
@@ -29,7 +29,10 @@ const firebaseApp = createFirebaseApp();
 
 // Auth exports
 export const auth = getAuth(firebaseApp);
-export const googleAuthProvider = new GoogleAuthProvider()
+export const googleAuthProvider = new GoogleAuthProvider();
+export const signInPopup = () => {
+    signInWithPopup(auth, googleAuthProvider)
+}
 
 // Firestore exports
 export const firestore = getFirestore(firebaseApp);
