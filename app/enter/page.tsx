@@ -77,17 +77,7 @@ function UsernameForm() {
   const checkUsername = useCallback(
     debounce(async (value: string) => {
       if (value.length >= 3) {
-        console.log("🚀 ~ debounce ~ value:", value);
-
-        const querySnapshot = await getDocs(
-          collection(getFirestore(), "usernames")
-        );
-        console.log("🚀 ~ debounce ~ querySnapshot:", querySnapshot);
-
-        querySnapshot.forEach((doc) => {
-          console.log(doc.id, "=>", doc.data());
-        });
-        const ref = doc(getFirestore(), "usernames", value);
+        const ref = doc(getFirestore(), "username", value);
         const snap = await getDoc(ref);
 
         setIsValid(!snap.exists());
@@ -146,7 +136,7 @@ function UsernameForm() {
             onChange={onChange}
           />
           <UsernameMessage
-            username={username}
+            username={formValue}
             isValid={isValid}
             loading={loading}
           />
@@ -180,10 +170,13 @@ function UsernameMessage({
   if (loading) {
     return <p>Checking...</p>;
   } else if (isValid) {
+    console.log("valid", username, isValid);
     return <p className="text-success">{username} is available!</p>;
   } else if (username && !isValid) {
+    console.log("not vlaid", username, isValid);
     return <p className="text-danger">{username} is taken!</p>;
   } else {
+    console.log("ELSE", username, isValid);
     return <p></p>;
   }
 }
