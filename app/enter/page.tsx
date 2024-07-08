@@ -1,15 +1,8 @@
 "use client";
 
 import { UserContext } from "@/lib/context";
-import { auth, firestore, signInPopup } from "@/lib/firebase";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  writeBatch,
-} from "firebase/firestore";
+import { auth, signInPopup } from "@/lib/firebase";
+import { doc, getDoc, getFirestore, writeBatch } from "firebase/firestore";
 import {
   ChangeEvent,
   FormEvent,
@@ -19,6 +12,7 @@ import {
   useState,
 } from "react";
 import debounce from "lodash.debounce";
+import { Collections } from "@/lib/constants";
 export default function EnterPage({}) {
   const { user, username } = useContext(UserContext);
 
@@ -77,7 +71,7 @@ function UsernameForm() {
   const checkUsername = useCallback(
     debounce(async (value: string) => {
       if (value.length >= 3) {
-        const ref = doc(getFirestore(), "username", value);
+        const ref = doc(getFirestore(), Collections.USERNAMES, value);
         const snap = await getDoc(ref);
 
         setIsValid(!snap.exists());
@@ -109,8 +103,8 @@ function UsernameForm() {
     event.preventDefault();
 
     // Create refs for both documents
-    const userDoc = doc(getFirestore(), "users", user.uid);
-    const usernameDoc = doc(getFirestore(), "username", formValue);
+    const userDoc = doc(getFirestore(), Collections.USERS, user.uid);
+    const usernameDoc = doc(getFirestore(), Collections.USERNAMES, formValue);
 
     // batch write both docs
     const batch = writeBatch(getFirestore());
