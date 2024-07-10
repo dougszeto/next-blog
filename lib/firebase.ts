@@ -1,11 +1,10 @@
-import firebase, { getApp, initializeApp } from "firebase/app";
+import { getApp, initializeApp } from "firebase/app";
 import 'firebase/auth';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import 'firebase/firestore';
-import { DocumentData, DocumentSnapshot, QueryDocumentSnapshot, collection, getDoc, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
+import { DocumentData, QueryDocumentSnapshot, collection, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
 import 'firebase/storage';
 import { getStorage } from "firebase/storage";
-import { IUser } from "./user.model";
 import { Collections } from "./constants";
 
 
