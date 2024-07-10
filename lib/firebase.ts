@@ -2,9 +2,11 @@ import firebase, { getApp, initializeApp } from "firebase/app";
 import 'firebase/auth';
 import { getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import 'firebase/firestore';
-import { getFirestore } from "firebase/firestore";
+import { DocumentData, DocumentSnapshot, QueryDocumentSnapshot, collection, getDoc, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
 import 'firebase/storage';
 import { getStorage } from "firebase/storage";
+import { IUser } from "./user.model";
+import { Collections } from "./constants";
 
 
 const firebaseConfig = {
@@ -39,3 +41,31 @@ export const firestore = getFirestore(firebaseApp);
 
 // Storage exports
 export const storage = getStorage(firebaseApp)
+
+
+// Helper Functions
+/**
+ * Retrieves a user by username
+ * @param username 
+ * @returns QueryDocumentSnapshot
+ */
+export async function getUserWithUsername(username: string): Promise<QueryDocumentSnapshot<DocumentData, DocumentData>> {
+    const collectionRef = collection(getFirestore(), Collections.USERS);
+    const q = query(collectionRef, where('username', '==', username), limit(1));
+
+    const userDoc = (await getDocs(q)).docs[0];
+    return userDoc;
+}
+
+/**
+ * Converts a firestore document to JSON
+ * @param doc 
+ */
+export function postToJSON(doc: any): any {
+    const data = doc.data();
+    return {
+        ...data,
+        createdAt: data?.createdAt.toMillis(),
+        updatedAt: data?.updatedAt.toMillis()
+    }
+}
