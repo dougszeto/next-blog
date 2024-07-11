@@ -19,7 +19,7 @@ interface UserProfilePageProps {
 
 export async function getUserProfileData(
   username: string
-): UserProfilePageProps {
+): Promise<UserProfilePageProps> {
   const userDoc = await getUserWithUsername(username);
 
   // JSON serializable data
