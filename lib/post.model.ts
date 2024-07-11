@@ -1,6 +1,8 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface IPost {
     content: string;
-    createdAt: string;
+    createdAt: number | Timestamp;
     heartCount: number;
     published: boolean;
     slug: string;
