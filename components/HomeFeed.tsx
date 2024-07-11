@@ -24,7 +24,6 @@ interface HomeProps {
   initialPosts: IPost[];
 }
 export default function HomeFeed({ initialPosts }: HomeProps) {
-  console.log("🚀 ~ HomeFeed ~ initialPosts:", initialPosts);
   const [posts, setPosts] = useState(initialPosts);
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
