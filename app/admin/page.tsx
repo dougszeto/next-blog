@@ -1,4 +1,6 @@
 "use client";
+import styles from "@styles/Admin.module.css";
+
 import AuthCheck from "@/components/AuthCheck";
 import PostFeed from "@/components/PostFeed";
 import { Collections } from "@/lib/constants";
@@ -97,7 +99,7 @@ function CreateNewPost() {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="My Awesome Article!"
-        className="input"
+        className={styles.input}
       />
       <p>
         <strong>Slug:</strong> {slug}
