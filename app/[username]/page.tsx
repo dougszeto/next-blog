@@ -18,7 +18,7 @@ interface UserProfilePageProps {
   posts: Array<IPost>;
 }
 
-export async function getUserProfileData(
+async function getUserProfileData(
   username: string
 ): Promise<UserProfilePageProps> {
   const userDoc = await getUserWithUsername(username);

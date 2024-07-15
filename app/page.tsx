@@ -15,7 +15,7 @@ import {
 // max posts to query per page
 const LIMIT = 1;
 
-export async function getPosts() {
+async function getPosts() {
   const postsCollectionGroup = collectionGroup(
     getFirestore(),
     Collections.POSTS

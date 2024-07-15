@@ -14,7 +14,7 @@ import {
   query,
 } from "firebase/firestore";
 
-export async function getPost(
+async function getPost(
   username: string,
   slug: string
 ): Promise<{ post: IPost; path: string }> {
