@@ -216,6 +216,7 @@ input[type="file"] {
 }
 
 .upload-snippet {
+  display: inline-block;
   width: 75%;
     margin-left: auto;
     background: white;

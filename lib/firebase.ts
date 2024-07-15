@@ -39,7 +39,8 @@ export const signInPopup = () => {
 export const firestore = getFirestore(firebaseApp);
 
 // Storage exports
-export const storage = getStorage(firebaseApp)
+export const storage = getStorage(firebaseApp);
+export const STATE_CHANGED = 'state_changed';
 
 
 // Helper Functions
