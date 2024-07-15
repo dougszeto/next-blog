@@ -11,7 +11,7 @@ export function createMetadata({description, image, title}: CreateMetadataParams
             card: "summary",
             description,
             images: image,
-            site: "NextJS Course",
+            site: "Mini Blog",
             title,
         },
 
