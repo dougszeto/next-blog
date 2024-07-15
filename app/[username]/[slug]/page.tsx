@@ -57,6 +57,7 @@ interface PostPageProps {
   };
 }
 
+export const revalidate = 5;
 export default async function PostPage(props: PostPageProps) {
   const { username, slug } = props.params;
   const { post, path } = await getPost(username, slug);

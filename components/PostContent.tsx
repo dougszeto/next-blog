@@ -15,7 +15,6 @@ export default function PostContent({ initialPost, path }: PostContentProps) {
   const [realtimePost] = useDocumentData(postRef);
 
   const post = (realtimePost as IPost) || initialPost;
-  console.log("🚀 ~ PostContent ~ post:", post);
 
   const createdAt: Date =
     typeof post.createdAt === "number"
@@ -27,7 +26,9 @@ export default function PostContent({ initialPost, path }: PostContentProps) {
       <h1>{post.title}</h1>
       <span className="text-sm">
         Written by&nbsp;
-        <Link href={`/${post.username}`}>@{post.username}</Link>
+        <Link href={`/${post.username}`} className="text-info">
+          @{post.username}
+        </Link>
         &nbsp;on {createdAt?.toISOString()}
       </span>
       <ReactMarkdown>{post.content}</ReactMarkdown>
