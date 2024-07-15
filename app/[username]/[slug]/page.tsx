@@ -1,3 +1,4 @@
+import styles from "@styles/Post.module.css";
 import PostContent from "@/components/PostContent";
 import PostSideContent from "@/components/PostSideContent";
 import { Collections } from "@/lib/constants";
@@ -64,7 +65,7 @@ export default async function PostPage(props: PostPageProps) {
   const { post, path } = await getPost(username, slug);
 
   return (
-    <main>
+    <main className={styles.container}>
       <section>
         <PostContent initialPost={post} path={path} />
       </section>
