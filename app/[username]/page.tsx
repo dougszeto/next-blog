@@ -11,6 +11,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { notFound } from "next/navigation";
 
 interface UserProfilePageProps {
   user: IUser | null;
@@ -22,6 +23,7 @@ export async function getUserProfileData(
 ): Promise<UserProfilePageProps> {
   const userDoc = await getUserWithUsername(username);
 
+  if (!userDoc) notFound();
   // JSON serializable data
   let user = null;
   let posts: Array<IPost> = [];
