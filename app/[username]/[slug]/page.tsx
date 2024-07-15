@@ -1,8 +1,7 @@
-import AuthCheck from "@/components/AuthCheck";
-import HeartButton from "@/components/HeartButton";
 import PostContent from "@/components/PostContent";
+import PostSideContent from "@/components/PostSideContent";
 import { Collections } from "@/lib/constants";
-import { auth, getUserWithUsername, postToJSON } from "@/lib/firebase";
+import { getUserWithUsername, postToJSON } from "@/lib/firebase";
 import { IPost } from "@/lib/post.model";
 import {
   collectionGroup,
@@ -13,7 +12,6 @@ import {
   limit,
   query,
 } from "firebase/firestore";
-import Link from "next/link";
 
 export async function getPost(
   username: string,
@@ -71,19 +69,7 @@ export default async function PostPage(props: PostPageProps) {
         <PostContent initialPost={post} path={path} />
       </section>
       <aside className="card">
-        <p>
-          <strong>{post.heartCount || 0} ❤️</strong>
-        </p>
-
-        <AuthCheck
-          fallback={
-            <Link href="/enter">
-              <button>❤️ Sign Up</button>
-            </Link>
-          }
-        >
-          <HeartButton postPath={path} />
-        </AuthCheck>
+        <PostSideContent initialPost={post} path={path} />
       </aside>
     </main>
   );
