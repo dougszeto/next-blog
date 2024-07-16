@@ -13,6 +13,7 @@ import {
   limit,
   query,
 } from "firebase/firestore";
+import { createMetadata } from "@/lib/metadata";
 
 async function getPost(
   username: string,
@@ -60,6 +61,17 @@ interface PostPageProps {
 }
 
 export const revalidate = 5;
+
+export async function generateMetadata(props: PostPageProps) {
+  const { username, slug } = props.params;
+  const { post } = await getPost(username, slug);
+
+  return createMetadata({
+    title: post.title,
+    description: `"${post.title}" written by ${post.username}`,
+  });
+}
+
 export default async function PostPage(props: PostPageProps) {
   const { username, slug } = props.params;
   const { post, path } = await getPost(username, slug);

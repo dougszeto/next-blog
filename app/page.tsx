@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 
 // max posts to query per page
-const LIMIT = 1;
+const LIMIT = 10;
 
 async function getPosts() {
   const postsCollectionGroup = collectionGroup(

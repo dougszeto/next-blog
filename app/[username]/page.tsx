@@ -1,6 +1,7 @@
 import PostFeed from "@/components/PostFeed";
 import UserProfile from "@/components/UserProfile";
 import { getUserWithUsername, postToJSON } from "@/lib/firebase";
+import { createMetadata } from "@/lib/metadata";
 import { IPost } from "@/lib/post.model";
 import { IUser } from "@/lib/user.model";
 import {
@@ -13,14 +14,18 @@ import {
 } from "firebase/firestore";
 import { notFound } from "next/navigation";
 
-interface UserProfilePageProps {
+interface UserProfilePageData {
   user: IUser | null;
   posts: Array<IPost>;
 }
 
+interface UserProfilePageProps {
+  params: { username: string };
+}
+
 async function getUserProfileData(
   username: string
-): Promise<UserProfilePageProps> {
+): Promise<UserProfilePageData> {
   const userDoc = await getUserWithUsername(username);
 
   if (!userDoc) notFound();
@@ -43,11 +48,17 @@ async function getUserProfileData(
   }
   return { user, posts };
 }
+
+export async function generateMetadata(props: UserProfilePageProps) {
+  return createMetadata({
+    title: props.params.username,
+    description: `${props.params.username}'s posts`,
+  });
+}
+
 export default async function UserProfilePage({
   params,
-}: {
-  params: { username: string };
-}) {
+}: UserProfilePageProps) {
   const { user, posts } = await getUserProfileData(params.username);
   return (
     <main>
