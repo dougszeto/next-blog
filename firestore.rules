@@ -55,8 +55,11 @@ service cloud.firestore {
         let isValidContent = request.resource.data.content.size() < 20000 && request.resource.data.heartCount == 0;
         let username = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username;
         let usernameMatches = username == request.resource.data.username;
+        
+        // limit posting to admins only
+        let isAdmin = exists(/databases/$(database)/documents/admins/$(request.auth.uid));
 
-      	return isOwner && isNow && isValidContent && usernameMatches;
+      	return isAdmin && isOwner && isNow && isValidContent && usernameMatches;
       }
 
       function canUpdatePost(userId) {
