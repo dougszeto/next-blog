@@ -80,7 +80,7 @@ function PostList() {
   const postQuery = query(ref, orderBy("createdAt"));
 
   const [querySnapshot] = useCollection(postQuery);
-  const posts = querySnapshot?.docs.map((doc) => doc.data()) as IPost[];
+  const posts = (querySnapshot?.docs.map((doc) => doc.data()) ?? []) as IPost[];
 
   const filteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(searchTerm)
