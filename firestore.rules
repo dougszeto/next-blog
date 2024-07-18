@@ -5,6 +5,10 @@ service cloud.firestore {
     match /{document=**} {
 
       // Required for collection group queries
+      match /admins/{userId} {
+        allow read;
+      }
+      
       match /posts/{postId} {
         allow read;
       }
