@@ -6,6 +6,7 @@ import { Collections } from "@/lib/constants";
 import { auth } from "@/lib/firebase";
 import { IPost } from "@/lib/post.model";
 import {
+  deleteDoc,
   doc,
   DocumentData,
   DocumentReference,
@@ -20,6 +21,7 @@ import ReactMarkdown from "react-markdown";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import ImageUploader from "@/components/ImageUploader";
+import { useRouter } from "next/navigation";
 
 interface AdminPostEditProps {
   params: { slug: string };
@@ -33,6 +35,7 @@ export default function AdminPostEdit({ params }: AdminPostEditProps) {
 }
 
 function PostManager({ slug }: { slug: string }) {
+  const router = useRouter();
   const [isPreview, setIsPreview] = useState(false);
   const postRef = doc(
     getFirestore(),
@@ -45,6 +48,12 @@ function PostManager({ slug }: { slug: string }) {
   const [rawPost] = useDocumentDataOnce(postRef);
   console.log("🚀 ~ PostManager ~ rawPost:", rawPost);
   const post = rawPost as IPost;
+
+  const deletePost = async () => {
+    await deleteDoc(postRef);
+    router.push("/");
+    toast.success("Post deleted successfully!");
+  };
 
   return (
     <main className={styles.container}>
@@ -75,6 +84,9 @@ function PostManager({ slug }: { slug: string }) {
             >
               <button className={`btn-blue ${styles.grow}`}>Live view</button>
             </Link>
+            <button className="bg-red-600 text-white" onClick={deletePost}>
+              ⚠️ Delete post
+            </button>
           </aside>
         </>
       )}
