@@ -30,9 +30,19 @@ function PostItem({ post, admin = false }: PostItemProps) {
 
   return (
     <div className="card">
-      <Link href={`/${post.username}`}>
-        <strong>By @{post.username}</strong>
-      </Link>
+      <div className="flex justify-between">
+        <Link href={`/${post.username}`}>
+          <strong>By @{post.username}</strong>
+        </Link>
+        {admin &&
+          (post.published ? (
+            <span className="text-green-500">published!</span>
+          ) : (
+            <span className="text-red-500">unpublished</span>
+          ))}
+      </div>
+
+      <span></span>
       <Link href={postLink}>
         <h2>{post.title}</h2>
       </Link>
