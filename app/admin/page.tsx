@@ -3,7 +3,7 @@ import styles from "@styles/Admin.module.css";
 
 import AuthCheck from "@/components/AuthCheck";
 import PostFeed from "@/components/PostFeed";
-import { Collections } from "@/lib/constants";
+import { AdminTabs, Collections } from "@/lib/constants";
 import { UserContext } from "@/lib/context";
 import { auth } from "@/lib/firebase";
 import { IPost } from "@/lib/post.model";
@@ -15,25 +15,62 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  where,
 } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { FormEvent, useContext, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import kebabCase from "lodash.kebabcase";
 import toast from "react-hot-toast";
+import {
+  Tab,
+  TabPanel,
+  Tabs,
+  TabsBody,
+  TabsHeader,
+} from "@/lib/material-tailwind";
 
 export default function AdminPage({}) {
+  const data = [
+    {
+      label: "Write a new post",
+      value: AdminTabs.CREATE,
+      renderContent: () => <CreateNewPost />,
+    },
+    {
+      label: "View Posts",
+      value: AdminTabs.VIEW,
+      renderContent: () => <PostList />,
+    },
+  ];
   return (
     <main>
       <AuthCheck>
-        <PostList />
-        <CreateNewPost />
+        <h1>Manage Your Posts</h1>
+
+        <Tabs value={AdminTabs.CREATE}>
+          <TabsHeader>
+            {data.map(({ label, value }) => (
+              <Tab key={value} value={value}>
+                {label}
+              </Tab>
+            ))}
+          </TabsHeader>
+          <TabsBody>
+            {data.map(({ value, renderContent }) => (
+              <TabPanel key={value} value={value}>
+                {renderContent()}
+              </TabPanel>
+            ))}
+          </TabsBody>
+        </Tabs>
       </AuthCheck>
     </main>
   );
 }
 
 function PostList() {
+  const [searchTerm, setSearchTerm] = useState("");
   const ref = collection(
     getFirestore(),
     Collections.USERS,
@@ -45,10 +82,22 @@ function PostList() {
   const [querySnapshot] = useCollection(postQuery);
   const posts = querySnapshot?.docs.map((doc) => doc.data()) as IPost[];
 
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm)
+  );
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
   return (
     <>
-      <h1>Manage Your Posts</h1>
-      <PostFeed posts={posts} admin />
+      <input
+        type="text"
+        placeholder="search for an article"
+        onChange={handleSearch}
+      />
+      <PostFeed posts={filteredPosts} admin />
     </>
   );
 }
