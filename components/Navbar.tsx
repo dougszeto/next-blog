@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
 export default function Navbar({}) {
-  const { user, username } = useContext(UserContext);
+  const { user, username, isAdmin } = useContext(UserContext);
 
   const router = useRouter();
   const signOutNow = () => {
@@ -29,9 +29,11 @@ export default function Navbar({}) {
               <button onClick={signOutNow}>Sign Out</button>
             </li>
             <li>
-              <Link href="/admin">
-                <button className="btn-blue">Write Posts</button>
-              </Link>
+              {isAdmin && (
+                <Link href="/admin">
+                  <button className="btn-blue">Write Posts</button>
+                </Link>
+              )}
             </li>
             <li>
               <Link href={`/${username}`}>
