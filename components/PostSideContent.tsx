@@ -19,7 +19,6 @@ export default function PostContent({
   const [realtimePost] = useDocumentData(postRef);
 
   const post = (realtimePost as IPost) || initialPost;
-  console.log("🚀 ~ post:", post);
 
   return (
     <>

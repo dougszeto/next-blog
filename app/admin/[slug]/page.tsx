@@ -43,7 +43,6 @@ function PostManager({ slug }: { slug: string }) {
   );
 
   const [rawPost] = useDocumentDataOnce(postRef);
-  console.log("🚀 ~ PostManager ~ rawPost:", rawPost);
   const post = rawPost as IPost;
 
   return (

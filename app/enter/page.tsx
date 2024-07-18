@@ -164,13 +164,10 @@ function UsernameMessage({
   if (loading) {
     return <p>Checking...</p>;
   } else if (isValid) {
-    console.log("valid", username, isValid);
     return <p className="text-success">{username} is available!</p>;
   } else if (username && !isValid) {
-    console.log("not vlaid", username, isValid);
     return <p className="text-danger">{username} is taken!</p>;
   } else {
-    console.log("ELSE", username, isValid);
     return <p></p>;
   }
 }
