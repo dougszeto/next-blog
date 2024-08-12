@@ -45,7 +45,7 @@ export default function AdminPage({}) {
   ];
   return (
     <main>
-      <AuthCheck>
+      <AuthCheck adminOnly={true}>
         <h1>Manage Your Posts</h1>
 
         <Tabs value={AdminTabs.CREATE}>
