@@ -31,7 +31,7 @@ export default function PostContent({ initialPost, path }: PostContentProps) {
         </Link>
         &nbsp;on {createdAt?.toISOString()}
       </span>
-      <ReactMarkdown>{post.content}</ReactMarkdown>
+      <ReactMarkdown className="whitespace-pre-wrap">{post.content}</ReactMarkdown>
     </div>
   );
 }
