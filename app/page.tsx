@@ -14,6 +14,7 @@ import {
 
 // max posts to query per page
 const LIMIT = 10;
+export const revalidate = 5;
 
 async function getPosts() {
   const postsCollectionGroup = collectionGroup(
