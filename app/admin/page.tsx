@@ -3,7 +3,7 @@ import styles from "@styles/Admin.module.css";
 
 import AuthCheck from "@/components/AuthCheck";
 import PostFeed from "@/components/PostFeed";
-import { AdminTabs, Collections } from "@/lib/constants";
+import { AdminTabs, Collections, SortBy } from "@/lib/constants";
 import { UserContext } from "@/lib/context";
 import { auth } from "@/lib/firebase";
 import { IPost } from "@/lib/post.model";
@@ -71,13 +71,26 @@ export default function AdminPage({}) {
 
 function PostList() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [sort, setSort] = useState(SortBy.RECENT);
+
+  const generateOrderBy = (sortBy: SortBy) => {
+    switch (sortBy) {
+      case SortBy.HEARTS:
+        return orderBy("heartCount", "desc");
+      case SortBy.OLDEST:
+        return orderBy("updatedAt", "asc");
+      default:
+        return orderBy("updatedAt", "desc");
+    }
+  };
+
   const ref = collection(
     getFirestore(),
     Collections.USERS,
     auth.currentUser?.uid || "",
     Collections.POSTS
   );
-  const postQuery = query(ref, orderBy("createdAt"));
+  const postQuery = query(ref, generateOrderBy(sort));
 
   const [querySnapshot] = useCollection(postQuery);
   const posts = (querySnapshot?.docs.map((doc) => doc.data()) ?? []) as IPost[];
@@ -90,6 +103,10 @@ function PostList() {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
+  const handleChangeSort = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSort(Number(event.target.value));
+  };
+
   return (
     <>
       <input
@@ -97,6 +114,11 @@ function PostList() {
         placeholder="search for an article"
         onChange={handleSearch}
       />
+      <select value={sort} onChange={handleChangeSort}>
+        <option value={SortBy.RECENT}>Most Recent</option>
+        <option value={SortBy.HEARTS}>Popular</option>
+        <option value={SortBy.OLDEST}>Oldest</option>
+      </select>
       <PostFeed posts={filteredPosts} admin />
     </>
   );
