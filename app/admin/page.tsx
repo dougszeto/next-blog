@@ -9,7 +9,9 @@ import { auth } from "@/lib/firebase";
 import { IPost } from "@/lib/post.model";
 import {
   collection,
+  CollectionReference,
   doc,
+  DocumentData,
   getFirestore,
   orderBy,
   query,
@@ -72,6 +74,7 @@ export default function AdminPage({}) {
 function PostList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sort, setSort] = useState(SortBy.RECENT);
+  const [filter, setFilter] = useState("all");
 
   const generateOrderBy = (sortBy: SortBy) => {
     switch (sortBy) {
@@ -84,13 +87,30 @@ function PostList() {
     }
   };
 
+  const generateWhereClause = (filter: string) => {
+    if (filter === "all") return;
+    return where("published", "==", true);
+  };
+
+  const generateQuery = (
+    ref: CollectionReference<DocumentData, DocumentData>,
+    sortBy: SortBy,
+    filterBy: string
+  ) => {
+    const order = generateOrderBy(sortBy);
+    const whereClause = generateWhereClause(filterBy);
+
+    if (whereClause) return query(ref, whereClause, order);
+
+    return query(ref, order);
+  };
   const ref = collection(
     getFirestore(),
     Collections.USERS,
     auth.currentUser?.uid || "",
     Collections.POSTS
   );
-  const postQuery = query(ref, generateOrderBy(sort));
+  const postQuery = generateQuery(ref, sort, filter);
 
   const [querySnapshot] = useCollection(postQuery);
   const posts = (querySnapshot?.docs.map((doc) => doc.data()) ?? []) as IPost[];
@@ -107,6 +127,9 @@ function PostList() {
     setSort(Number(event.target.value));
   };
 
+  const handleFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFilter(event.target.value);
+  };
   return (
     <>
       <input
@@ -114,11 +137,52 @@ function PostList() {
         placeholder="search for an article"
         onChange={handleSearch}
       />
+      <span>Sort by:&nbsp;</span>
       <select value={sort} onChange={handleChangeSort}>
         <option value={SortBy.RECENT}>Most Recent</option>
         <option value={SortBy.HEARTS}>Popular</option>
         <option value={SortBy.OLDEST}>Oldest</option>
       </select>
+      <div className="flex flex-row">
+        <span>Show:&nbsp;</span>
+        <div className="flex flex-row mr-4">
+          <input
+            type="radio"
+            id="all"
+            value="all"
+            name="filter"
+            checked={filter === "all"}
+            onChange={handleFilterChange}
+          />
+          &nbsp;
+          <label htmlFor="all">all</label>
+        </div>
+        <div className="flex flex-row mr-4">
+          <input
+            type="radio"
+            id="published"
+            value="published"
+            name="filter"
+            checked={filter === "published"}
+            onChange={handleFilterChange}
+          />
+          &nbsp;
+          <label htmlFor="published">published</label>
+        </div>
+        <div className="flex flex-row mr-4">
+          <input
+            type="radio"
+            id="unpublished"
+            value="unpublished"
+            name="filter"
+            checked={filter === "unpublished"}
+            onChange={handleFilterChange}
+          />
+          &nbsp;
+          <label htmlFor="unpublished">unpublished</label>
+        </div>
+      </div>
+
       <PostFeed posts={filteredPosts} admin />
     </>
   );
