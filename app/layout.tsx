@@ -8,7 +8,7 @@ import Providers from "@/components/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Doug's Next Blog",
+  title: "Doug's Grubs",
   description: "A blog site created with NextJS",
 };
 

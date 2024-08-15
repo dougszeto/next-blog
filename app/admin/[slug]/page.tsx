@@ -26,7 +26,7 @@ interface AdminPostEditProps {
 }
 export default function AdminPostEdit({ params }: AdminPostEditProps) {
   return (
-    <AuthCheck>
+    <AuthCheck adminOnly={true}>
       <PostManager slug={params.slug} />
     </AuthCheck>
   );
