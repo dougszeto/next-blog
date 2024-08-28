@@ -8,6 +8,7 @@ interface CreateMetadataParams {
 }
 export function createMetadata({description, image = '', title, imageAlt = ''}: CreateMetadataParams): Metadata {
     return {
+        title,
         description,
         twitter: {
             card: "summary",
