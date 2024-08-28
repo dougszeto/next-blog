@@ -50,9 +50,12 @@ async function getUserProfileData(
 }
 
 export async function generateMetadata(props: UserProfilePageProps) {
+  const { user } = await getUserProfileData(props.params.username);
+
   return createMetadata({
     title: props.params.username,
-    description: `${props.params.username}'s posts`,
+    description: `View ${props.params.username}'s profile on dougsgrubs`,
+    image: user?.photoURL
   });
 }
 

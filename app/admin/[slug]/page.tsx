@@ -96,17 +96,16 @@ function PostForm({ postRef, defaultValues, isPreview }: PostFormProps) {
 
   const updatePost = async ({
     content,
+    coverPhoto,
     published,
-  }: {
-    content: string;
-    published: boolean;
-  }) => {
+  }: Pick<IPost, 'content' | 'coverPhoto' | 'published'>) => {
     await updateDoc(postRef, {
       content,
+      coverPhoto,
       published,
       updatedAt: serverTimestamp(),
     });
-    reset({ content, published });
+    reset({ content, coverPhoto, published });
     toast.success("Post updated successfully!");
   };
 
@@ -139,6 +138,9 @@ function PostForm({ postRef, defaultValues, isPreview }: PostFormProps) {
           />
           <label>Published</label>
         </fieldset>
+
+        <label>Cover Photo</label>
+        <input {...register("coverPhoto")} type="text" placeholder="https://images.com/image.jpg" />
 
         <button
           type="submit"

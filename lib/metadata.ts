@@ -3,21 +3,22 @@ import { Metadata } from "next";
 interface CreateMetadataParams {
     description?: string;
     image?: string;
+    imageAlt?: string;
     title?: string;
 }
-export function createMetadata({description, image, title}: CreateMetadataParams): Metadata {
+export function createMetadata({description, image = '', title, imageAlt = ''}: CreateMetadataParams): Metadata {
     return {
+        description,
         twitter: {
             card: "summary",
             description,
-            images: image,
-            site: "Mini Blog",
+            images: {url: image, alt: imageAlt},
             title,
         },
 
         openGraph: {
             description,
-            images: image,
+            images: {url: image, alt: imageAlt},
             title,
         }
     }

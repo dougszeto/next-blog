@@ -69,6 +69,7 @@ export async function generateMetadata(props: PostPageProps) {
   return createMetadata({
     title: post.title,
     description: `"${post.title}" written by ${post.username}`,
+    image: post.coverPhoto
   });
 }
 
