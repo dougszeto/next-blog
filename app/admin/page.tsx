@@ -88,8 +88,14 @@ function PostList() {
   };
 
   const generateWhereClause = (filter: string) => {
-    if (filter === "all") return;
-    return where("published", "==", true);
+    switch (filter) {
+      case "published":
+        return where("published", "==", true);
+      case "unpublished":
+        return where("published", "==", false);
+      default:
+        return;
+    }
   };
 
   const generateQuery = (
@@ -98,12 +104,15 @@ function PostList() {
     filterBy: string
   ) => {
     const order = generateOrderBy(sortBy);
+
     const whereClause = generateWhereClause(filterBy);
 
-    if (whereClause) return query(ref, whereClause, order);
-
+    if (whereClause){
+      return query(ref, whereClause, order);
+    } 
     return query(ref, order);
   };
+  
   const ref = collection(
     getFirestore(),
     Collections.USERS,
@@ -114,7 +123,7 @@ function PostList() {
 
   const [querySnapshot] = useCollection(postQuery);
   const posts = (querySnapshot?.docs.map((doc) => doc.data()) ?? []) as IPost[];
-
+  
   const filteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(searchTerm)
   );
